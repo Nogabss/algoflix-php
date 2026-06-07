@@ -1,0 +1,51 @@
+<?php
+
+require_once __DIR__ . '/../config/session.php';
+require_once __DIR__ . '/../config/Database.php';
+
+class DashboardController
+{
+    private $pdo;
+
+    public function __construct()
+    {
+        $this->pdo = Database::getConnection();
+    }
+
+    public function index()
+    {
+        // Só admin pode ver o dashboard
+        if (empty($_SESSION['is_admin'])) {
+            die("Acesso restrito ao administrador.");
+        }
+
+        $dados = [
+            "usuarios"      => $this->count("usuarios"),
+            "filmes"        => $this->count("filmes"),
+            "comentarios"   => $this->count("comentarios"),
+            "avaliacoes"    => $this->count("avaliacoes"),
+            "favoritos"     => $this->count("favoritos"),
+            "visualizacoes" => $this->count("historico_visualizacao")
+        ];
+
+        require_once __DIR__ . '/../views/dashboard/index.php';
+    }
+
+    private function count($tabela)
+    {
+        $sql = "SELECT COUNT(*) FROM $tabela";
+        return $this->pdo->query($sql)->fetchColumn();
+    }
+}
+
+// Roteia ?action=... quando o controller é chamado direto
+if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
+    $controller = new DashboardController();
+    $action = $_REQUEST['action'] ?? 'index';
+
+    if (method_exists($controller, $action)) {
+        $controller->$action();
+    } else {
+        echo "Ação inválida.";
+    }
+}

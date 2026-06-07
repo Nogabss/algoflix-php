@@ -1,0 +1,26 @@
+body {
+    background: #000;
+    color: white;
+    font-family: Arial;
+}
+
+h1 {
+    color: red;
+}
+
+button {
+    background: red;
+    color: white;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+textarea {
+    width: 300px;
+    height: 80px;
+}
