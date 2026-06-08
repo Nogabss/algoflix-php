@@ -4,6 +4,10 @@ require_once __DIR__ . '/../config/session.php';
 require_once __DIR__ . '/../helpers/Csrf.php';
 require_once __DIR__ . '/../helpers/Aviso.php';
 require_once __DIR__ . '/../models/Filme.php';
+require_once __DIR__ . '/../models/Categoria.php';
+require_once __DIR__ . '/../models/Avaliacao.php';
+require_once __DIR__ . '/../models/Favorito.php';
+require_once __DIR__ . '/../models/Comentario.php';
 
 class FilmeController
 {
@@ -17,6 +21,7 @@ class FilmeController
     public function index()
     {
         $filmes = $this->model->listarTodos();
+        $categorias = (new Categoria())->listarTodas();
         require __DIR__ . '/../views/filmes/index.php';
     }
 
@@ -29,6 +34,16 @@ class FilmeController
             Aviso::erro("Filme não encontrado.", BASE_URL . "/controllers/FilmeController.php?action=index", "Voltar ao catálogo");
         }
 
+        $filme_id = $filme['id'];
+        $media = (new Avaliacao())->media($filme_id);
+        $jaEhFavorito = false;
+
+        if (!empty($_SESSION['usuario_id'])) {
+            $jaEhFavorito = (new Favorito())->existe($_SESSION['usuario_id'], $filme_id);
+        }
+
+        $comentarios = (new Comentario())->listar($filme_id);
+
         require __DIR__ . '/../views/filmes/detalhes.php';
     }
 
@@ -36,6 +51,7 @@ class FilmeController
     {
         $categoria_id = $_GET['categoria_id'] ?? 0;
         $filmes = $this->model->listarPorCategoria($categoria_id);
+        $categorias = (new Categoria())->listarTodas();
         require __DIR__ . '/../views/filmes/index.php';
     }
 

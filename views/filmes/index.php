@@ -1,9 +1,6 @@
 <?php
 require_once __DIR__ . '/../../config/session.php';
 require_once __DIR__ . '/../../helpers/Csrf.php';
-require_once __DIR__ . '/../../models/Categoria.php';
-
-$categorias = (new Categoria())->listarTodas();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">

@@ -1,16 +1,6 @@
 <?php
 require_once __DIR__ . '/../../config/session.php';
 require_once __DIR__ . '/../../helpers/Csrf.php';
-require_once __DIR__ . '/../../models/Avaliacao.php';
-require_once __DIR__ . '/../../models/Favorito.php';
-
-$filme_id = $filme['id'];
-$media = (new Avaliacao())->media($filme_id);
-
-$jaEhFavorito = false;
-if (!empty($_SESSION['usuario_id'])) {
-    $jaEhFavorito = (new Favorito())->existe($_SESSION['usuario_id'], $filme_id);
-}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">

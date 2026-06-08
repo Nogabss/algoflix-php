@@ -54,9 +54,9 @@ hr {
     margin: 28px 0;
 }
 
-main {
+/* main {
     min-height: calc(100vh - 60px);
-}
+} */
 
 button {
     background: var(--brand);

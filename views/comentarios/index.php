@@ -1,10 +1,6 @@
 <?php
 require_once __DIR__ . '/../../config/session.php';
 require_once __DIR__ . '/../../helpers/Csrf.php';
-require_once __DIR__ . '/../../models/Comentario.php';
-
-$model = new Comentario();
-$comentarios = $model->listar($filme_id);
 ?>
 
 <h2>Comentários</h2>
