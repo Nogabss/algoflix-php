@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../config/session.php';
 require_once __DIR__ . '/../helpers/Csrf.php';
+require_once __DIR__ . '/../helpers/Aviso.php';
 require_once __DIR__ . '/../models/Filme.php';
 
 class FilmeController
@@ -27,8 +28,7 @@ class FilmeController
         $filme = $this->model->buscarPorId($id);
 
         if (!$filme) {
-            echo "Filme não encontrado.";
-            return;
+            Aviso::erro("Filme não encontrado.", BASE_URL . "/controllers/FilmeController.php?action=index", "Voltar ao catálogo");
         }
 
         require __DIR__ . '/../views/filmes/detalhes.php';
@@ -57,12 +57,12 @@ class FilmeController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!Csrf::check($_POST['csrf_token'])) {
-                die("CSRF inválido");
+                Aviso::erro("Token CSRF inválido. Recarregue a página e tente novamente.");
             }
 
             // Validação simples: título é obrigatório
             if (empty(trim($_POST['titulo']))) {
-                die("O título é obrigatório.");
+                Aviso::erro("O título do filme é obrigatório.");
             }
 
             $this->model->criar(
@@ -95,11 +95,11 @@ class FilmeController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!Csrf::check($_POST['csrf_token'])) {
-                die("CSRF inválido");
+                Aviso::erro("Token CSRF inválido. Recarregue a página e tente novamente.");
             }
 
             if (empty(trim($_POST['titulo']))) {
-                die("O título é obrigatório.");
+                Aviso::erro("O título do filme é obrigatório.");
             }
 
             $this->model->atualizar(
@@ -128,7 +128,7 @@ class FilmeController
         $this->exigirAdmin();
 
         if (!Csrf::check($_POST['csrf_token'])) {
-            die("CSRF inválido");
+            Aviso::erro("Token CSRF inválido. Recarregue a página e tente novamente.");
         }
 
         $this->model->excluir($_POST['id']);
@@ -141,7 +141,11 @@ class FilmeController
     private function exigirAdmin()
     {
         if (empty($_SESSION['is_admin'])) {
-            die("Acesso restrito ao administrador.");
+            Aviso::erro(
+                "Esta área é restrita ao administrador.",
+                BASE_URL . "/index.php",
+                "Voltar ao início"
+            );
         }
     }
 }
@@ -155,6 +159,6 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
     if (method_exists($controller, $action)) {
         $controller->$action();
     } else {
-        echo "Ação inválida.";
+        Aviso::erro("Ação inválida.");
     }
 }

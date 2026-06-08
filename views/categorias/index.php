@@ -11,13 +11,16 @@ require_once __DIR__ . '/../../helpers/Csrf.php';
 </head>
 <body>
 
-<header class="topo">
-    <a href="<?= BASE_URL ?>/controllers/FilmeController.php?action=index">← Catálogo</a>
-    <a href="<?= BASE_URL ?>/controllers/CategoriaController.php?action=criar">+ Nova categoria</a>
-</header>
+<?php include __DIR__ . '/../partials/header.php'; ?>
+
+<div class="pagina-cabecalho">
+    <h1>Categorias</h1>
+    <div class="toolbar-admin">
+        <a href="<?= BASE_URL ?>/controllers/CategoriaController.php?action=criar" class="botao-acao">+ Nova categoria</a>
+    </div>
+</div>
 
 <main>
-    <h1>Categorias</h1>
     <table class="tabela">
         <thead><tr><th>ID</th><th>Nome</th><th>Ações</th></tr></thead>
         <tbody>

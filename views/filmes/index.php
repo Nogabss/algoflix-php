@@ -15,20 +15,19 @@ $categorias = (new Categoria())->listarTodas();
 </head>
 <body>
 
-<header class="topo">
-    <h1>🎬 Algoflix</h1>
-    <nav>
-        <a href="<?= BASE_URL ?>/controllers/FilmeController.php?action=index">Catálogo</a>
-        <a href="<?= BASE_URL ?>/controllers/FilmeController.php?action=criar">+ Novo filme</a>
-        <a href="<?= BASE_URL ?>/controllers/CategoriaController.php?action=index">Categorias</a>
-    </nav>
+<?php include __DIR__ . '/../partials/header.php'; ?>
 
-    <form method="GET" action="<?= BASE_URL ?>/controllers/FilmeController.php" class="busca">
-        <input type="hidden" name="action" value="busca">
-        <input type="search" name="q" placeholder="Buscar filme..." required>
-        <button type="submit">Buscar</button>
-    </form>
-</header>
+<!-- Cabeçalho da página + toolbar de admin -->
+<div class="pagina-cabecalho">
+    <h1>Catálogo</h1>
+    <?php if (!empty($_SESSION['is_admin'])): ?>
+        <div class="toolbar-admin">
+            <a href="<?= BASE_URL ?>/controllers/FilmeController.php?action=criar" class="botao-acao">+ Novo filme</a>
+            <a href="<?= BASE_URL ?>/controllers/CategoriaController.php?action=index" class="botao-acao secundario">Gerenciar categorias</a>
+            <a href="<?= BASE_URL ?>/controllers/DashboardController.php?action=index" class="botao-acao secundario">Dashboard</a>
+        </div>
+    <?php endif; ?>
+</div>
 
 <!-- Filtros por categoria -->
 <section class="filtros">
@@ -52,7 +51,7 @@ $categorias = (new Categoria())->listarTodas();
                 <?php if (!empty($f['capa'])): ?>
                     <img src="<?= htmlspecialchars($f['capa']) ?>" alt="">
                 <?php else: ?>
-                    <div class="capa-placeholder">🎞️</div>
+                    <div class="capa-placeholder"></div>
                 <?php endif; ?>
                 <h3><?= htmlspecialchars($f['titulo']) ?></h3>
             </a>

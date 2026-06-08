@@ -13,8 +13,9 @@ $isEdicao = !empty($categoria);
 </head>
 <body>
 
-<header class="topo">
-    <a href="<?= BASE_URL ?>/controllers/CategoriaController.php?action=index">← Voltar</a>
+<header class="topo-simples">
+    <a href="<?= BASE_URL ?>/index.php" class="marca">algoflix</a>
+    <a href="<?= BASE_URL ?>/controllers/CategoriaController.php?action=index" class="link-voltar">← Voltar às categorias</a>
 </header>
 
 <main class="form-container">

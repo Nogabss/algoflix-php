@@ -14,8 +14,9 @@ $editando = !empty($filme);
 </head>
 <body>
 
-<header class="topo">
-    <a href="<?= BASE_URL ?>/controllers/FilmeController.php?action=index">← Voltar</a>
+<header class="topo-simples">
+    <a href="<?= BASE_URL ?>/index.php" class="marca">algoflix</a>
+    <a href="<?= BASE_URL ?>/controllers/FilmeController.php?action=index" class="link-voltar">← Voltar ao catálogo</a>
 </header>
 
 <main class="form-container">

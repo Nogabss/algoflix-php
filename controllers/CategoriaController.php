@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../config/session.php';
 require_once __DIR__ . '/../helpers/Csrf.php';
+require_once __DIR__ . '/../helpers/Aviso.php';
 require_once __DIR__ . '/../models/Categoria.php';
 
 class CategoriaController
@@ -25,7 +26,7 @@ class CategoriaController
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!Csrf::check($_POST['csrf_token'])) {
-                die("CSRF inválido");
+                Aviso::erro("Token CSRF inválido. Recarregue a página e tente novamente.");
             }
 
             $this->model->criar($_POST['nome']);
@@ -46,7 +47,7 @@ class CategoriaController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!Csrf::check($_POST['csrf_token'])) {
-                die("CSRF inválido");
+                Aviso::erro("Token CSRF inválido. Recarregue a página e tente novamente.");
             }
 
             $this->model->atualizar($id, $_POST['nome']);
@@ -62,7 +63,7 @@ class CategoriaController
     public function excluir()
     {
         if (!Csrf::check($_POST['csrf_token'])) {
-            die("CSRF inválido");
+            Aviso::erro("Token CSRF inválido. Recarregue a página e tente novamente.");
         }
 
         $this->model->excluir($_POST['id']);
@@ -80,6 +81,6 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
     if (method_exists($controller, $action)) {
         $controller->$action();
     } else {
-        echo "Ação inválida.";
+        Aviso::erro("Ação inválida.");
     }
 }

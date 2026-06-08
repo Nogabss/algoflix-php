@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../config/session.php';
 require_once __DIR__ . '/../helpers/Csrf.php';
+require_once __DIR__ . '/../helpers/Aviso.php';
 require_once __DIR__ . '/../models/Avaliacao.php';
 
 class AvaliacaoController
@@ -21,7 +22,7 @@ class AvaliacaoController
         }
 
         if (!Csrf::check($_POST['csrf_token'])) {
-            die("CSRF inválido");
+            Aviso::erro("Token CSRF inválido. Recarregue a página e tente novamente.");
         }
 
         $usuario = $_SESSION['usuario_id'];
@@ -29,7 +30,7 @@ class AvaliacaoController
         $nota = (int) $_POST['nota'];
 
         if ($nota < 1 || $nota > 5) {
-            die("Nota inválida");
+            Aviso::erro("Nota inválida. Use uma nota de 1 a 5.");
         }
 
         $this->model->salvar($usuario, $filme, $nota);
@@ -47,6 +48,6 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
     if (method_exists($controller, $action)) {
         $controller->$action();
     } else {
-        echo "Ação inválida.";
+        Aviso::erro("Ação inválida.");
     }
 }

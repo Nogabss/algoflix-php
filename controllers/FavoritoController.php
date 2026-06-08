@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../config/session.php';
 require_once __DIR__ . '/../helpers/Csrf.php';
+require_once __DIR__ . '/../helpers/Aviso.php';
 require_once __DIR__ . '/../models/Favorito.php';
 
 class FavoritoController
@@ -33,7 +34,7 @@ class FavoritoController
         }
 
         if (!Csrf::check($_POST['csrf_token'])) {
-            die("CSRF inválido");
+            Aviso::erro("Token CSRF inválido. Recarregue a página e tente novamente.");
         }
 
         $usuario = $_SESSION['usuario_id'];
@@ -53,7 +54,7 @@ class FavoritoController
         }
 
         if (!Csrf::check($_POST['csrf_token'])) {
-            die("CSRF inválido");
+            Aviso::erro("Token CSRF inválido. Recarregue a página e tente novamente.");
         }
 
         $usuario = $_SESSION['usuario_id'];
@@ -74,6 +75,6 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
     if (method_exists($controller, $action)) {
         $controller->$action();
     } else {
-        echo "Ação inválida.";
+        Aviso::erro("Ação inválida.");
     }
 }
