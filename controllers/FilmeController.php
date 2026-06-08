@@ -59,6 +59,10 @@ class FilmeController
                 Aviso::erro("O título do filme é obrigatório.");
             }
 
+            if (empty($_POST['categoria_id'])) {
+                Aviso::erro("A categoria é obrigatória.");
+            }
+
             $this->model->criar(
                 $_POST['titulo'],
                 $_POST['descricao'],
