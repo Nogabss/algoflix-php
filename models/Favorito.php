@@ -38,6 +38,22 @@ class Favorito
         ]);
     }
 
+    // Verifica se um filme já está nos favoritos do usuário
+    public function existe($usuario_id, $filme_id)
+    {
+        $sql = "SELECT 1 FROM favoritos
+                WHERE usuario_id = :usuario AND filme_id = :filme
+                LIMIT 1";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':usuario' => $usuario_id,
+            ':filme'   => $filme_id
+        ]);
+
+        return (bool) $stmt->fetchColumn();
+    }
+
     public function listar($usuario_id)
     {
         $sql = "SELECT f.*

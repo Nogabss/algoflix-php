@@ -10,17 +10,13 @@ require_once __DIR__ . '/../../config/session.php';
 </head>
 <body>
 
-<header class="topo">
-    <a href="<?= BASE_URL ?>/controllers/FilmeController.php?action=index">← Catálogo</a>
-    <form method="GET" action="<?= BASE_URL ?>/controllers/FilmeController.php" class="busca">
-        <input type="hidden" name="action" value="busca">
-        <input type="search" name="q" value="<?= htmlspecialchars($termo) ?>" required>
-        <button type="submit">Buscar</button>
-    </form>
-</header>
+<?php include __DIR__ . '/../partials/header.php'; ?>
+
+<div class="pagina-cabecalho">
+    <h1>Resultados para "<?= htmlspecialchars($termo) ?>"</h1>
+</div>
 
 <main class="grade">
-    <h1>Resultados para: <?= htmlspecialchars($termo) ?></h1>
 
     <?php if (empty($filmes)): ?>
         <p>Nenhum filme encontrado.</p>
@@ -32,7 +28,7 @@ require_once __DIR__ . '/../../config/session.php';
                 <?php if (!empty($f['capa'])): ?>
                     <img src="<?= htmlspecialchars($f['capa']) ?>" alt="">
                 <?php else: ?>
-                    <div class="capa-placeholder">🎞️</div>
+                    <div class="capa-placeholder"></div>
                 <?php endif; ?>
                 <h3><?= htmlspecialchars($f['titulo']) ?></h3>
             </a>

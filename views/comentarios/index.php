@@ -7,24 +7,36 @@ $model = new Comentario();
 $comentarios = $model->listar($filme_id);
 ?>
 
-<h2>💬 Comentários</h2>
+<h2>Comentários</h2>
 
-<!-- Formulário -->
-<form method="POST" action="<?= BASE_URL ?>/controllers/ComentarioController.php">
-    <input type="hidden" name="filme_id" value="<?= $filme_id ?>">
-    <input type="hidden" name="csrf_token" value="<?= Csrf::token() ?>">
+<!-- Formulário (só para usuários logados) -->
+<?php if (!empty($_SESSION['usuario_id'])): ?>
+    <form method="POST" action="<?= BASE_URL ?>/controllers/ComentarioController.php">
+        <input type="hidden" name="action" value="adicionar">
+        <input type="hidden" name="filme_id" value="<?= $filme_id ?>">
+        <input type="hidden" name="csrf_token" value="<?= Csrf::token() ?>">
 
-    <textarea name="comentario" placeholder="Escreva seu comentário..." required></textarea>
-    <button>Enviar</button>
-</form>
+        <textarea name="comentario" placeholder="Escreva seu comentário..." required></textarea>
+        <button>Enviar</button>
+    </form>
+<?php else: ?>
+    <p class="aviso-inline">
+        <a href="<?= BASE_URL ?>/controllers/LoginController.php?action=index">Faça login</a>
+        para deixar um comentário.
+    </p>
+<?php endif; ?>
 
 <hr>
 
 <!-- Lista -->
+<?php if (empty($comentarios)): ?>
+    <p class="vazio">Ainda não há comentários. Seja o primeiro!</p>
+<?php endif; ?>
+
 <?php foreach ($comentarios as $c): ?>
-    <div style="background:#222;color:white;margin:10px;padding:10px;">
-        <b><?= htmlspecialchars($c['nome']) ?></b><br>
-        <?= htmlspecialchars($c['comentario']) ?>
+    <div class="comentario">
+        <b><?= htmlspecialchars($c['nome']) ?></b>
         <small><?= $c['data_comentario'] ?></small>
+        <p><?= htmlspecialchars($c['comentario']) ?></p>
     </div>
 <?php endforeach; ?>

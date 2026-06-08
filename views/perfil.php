@@ -1,17 +1,9 @@
 <?php
-require_once '../config.php';
+require_once __DIR__ . '/../config/session.php';
 
-// Controle de Sessão: Se não estiver logado, expulsa para o login
+// Controle de sessão: se não estiver logado, vai para o login
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.php");
-    exit;
-}
-
-// Logout simples na mesma página para economizar arquivos
-if (isset($_GET['sair'])) {
-    session_destroy();
-    setcookie('lembrar_usuario', '', time() - 3600, '/'); // Apaga o cookie
-    header("Location: login.php");
+    header("Location: " . BASE_URL . "/controllers/LoginController.php?action=index");
     exit;
 }
 ?>
@@ -19,29 +11,40 @@ if (isset($_GET['sair'])) {
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Meu Perfil - PHP Flix</title>
+    <title>Meu Perfil - Algoflix</title>
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
 </head>
 <body>
-    <header>
-        <h1>Bem-vindo, <?php echo $_SESSION['usuario_nome']; ?>!</h1>
-        <p>Seu nível de acesso é: <strong><?php echo $_SESSION['usuario_role']; ?></strong></p>
-    </header>
-    
-    <main>
-        <?php if ($_SESSION['usuario_role'] === 'admin'): ?>
-            <section style="background: #fee; padding: 10px; border: 1px solid #f00;">
-                <h2>Painel do Administrador</h2>
-                <p>Aqui você colocaria links para o CRUD de filmes/receitas.</p>
-            </section>
-        <?php else: ?>
-            <section style="background: #eef; padding: 10px; border: 1px solid #00f;">
-                <h2>Área do Usuário</h2>
-                <p>Conteúdo exclusivo para usuários logados.</p>
-            </section>
-        <?php endif; ?>
-        
-        <br>
-        <a href="?sair=1"><button>Sair (Logout)</button></a>
-    </main>
+
+<?php include __DIR__ . '/partials/header.php'; ?>
+
+<div class="pagina-cabecalho">
+    <h1>Meu perfil</h1>
+</div>
+
+<main class="perfil">
+    <div class="card-info">
+        <p class="label">Nome</p>
+        <p class="valor"><?= htmlspecialchars($_SESSION['usuario_nome']) ?></p>
+    </div>
+
+    <div class="card-info">
+        <p class="label">Nível de acesso</p>
+        <p class="valor"><?= htmlspecialchars(ucfirst($_SESSION['usuario_role'])) ?></p>
+    </div>
+
+    <?php if ($_SESSION['usuario_role'] === 'admin'): ?>
+        <section class="painel">
+            <h2>Painel do administrador</h2>
+            <p>Você pode cadastrar, editar e excluir filmes e categorias.</p>
+            <div class="toolbar-admin">
+                <a href="<?= BASE_URL ?>/controllers/FilmeController.php?action=criar" class="botao-acao">+ Novo filme</a>
+                <a href="<?= BASE_URL ?>/controllers/CategoriaController.php?action=index" class="botao-acao secundario">Gerenciar categorias</a>
+                <a href="<?= BASE_URL ?>/controllers/DashboardController.php?action=index" class="botao-acao secundario">Dashboard</a>
+            </div>
+        </section>
+    <?php endif; ?>
+</main>
+
 </body>
 </html>

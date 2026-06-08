@@ -1,23 +1,79 @@
 <?php
-require_once '../config.php';
-require_once '../models/UserModel.php';
 
-$userModel = new UserModel($pdo);
+require_once __DIR__ . '/../config/session.php';
+require_once __DIR__ . '/../helpers/Csrf.php';
+require_once __DIR__ . '/../helpers/Aviso.php';
+require_once __DIR__ . '/../models/UserModel.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) die("CSRF Inválido.");
+class UserController
+{
+    private $model;
 
-    $nome = $_POST['nome'];
-    $cpf = $_POST['cpf'];
-    $data_nasc = $_POST['data_nascimento'];
-    $senha = $_POST['senha'];
-    $role = $_POST['role'] ?? 'usuario';
+    public function __construct()
+    {
+        $this->model = new UserModel();
+    }
 
-    if ($userModel->cadastrar($nome, $cpf, $data_nasc, $senha, $role)) {
-        header("Location: ../views/login.php");
-        exit;
-    } else {
-        echo "Erro ao cadastrar. CPF pode já existir. <a href='../views/cadastro.php'>Voltar</a>";
+    // Mostra o formulário de cadastro
+    public function index()
+    {
+        require __DIR__ . '/../views/cadastro.php';
+    }
+
+    // Mostra o perfil do usuário logado
+    public function perfil()
+    {
+        if (!isset($_SESSION['usuario_id'])) {
+            header("Location: " . BASE_URL . "/controllers/LoginController.php?action=index");
+            exit;
+        }
+
+        require __DIR__ . '/../views/perfil.php';
+    }
+
+    // Processa o cadastro (POST)
+    public function cadastrar()
+    {
+        if (!Csrf::check($_POST['csrf_token'])) {
+            Aviso::erro("Token CSRF inválido. Recarregue a página e tente novamente.");
+        }
+
+        $nome      = $_POST['nome'];
+        $cpf       = $_POST['cpf'];
+        $data_nasc = $_POST['data_nascimento'];
+        $senha     = $_POST['senha'];
+
+        if (empty(trim($nome)) || empty(trim($cpf)) || empty($senha)) {
+            Aviso::erro(
+                "Todos os campos são obrigatórios.",
+                BASE_URL . "/controllers/UserController.php?action=index",
+                "Voltar ao cadastro"
+            );
+        }
+
+        // Segurança: cadastro público sempre cria usuário comum
+        $role = 'usuario';
+
+        if ($this->model->cadastrar($nome, $cpf, $data_nasc, $senha, $role)) {
+            header("Location: " . BASE_URL . "/controllers/LoginController.php?action=index");
+            exit;
+        }
+
+        Aviso::erro(
+            "Não foi possível cadastrar. Esse CPF talvez já esteja em uso.",
+            BASE_URL . "/controllers/UserController.php?action=index",
+            "Voltar ao cadastro"
+        );
     }
 }
-?>
+
+if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
+    $controller = new UserController();
+    $action = $_REQUEST['action'] ?? 'index';
+
+    if (method_exists($controller, $action)) {
+        $controller->$action();
+    } else {
+        Aviso::erro("Ação inválida.");
+    }
+}

@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../config/session.php';
 require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../helpers/Aviso.php';
 
 class DashboardController
 {
@@ -16,7 +17,11 @@ class DashboardController
     {
         // Só admin pode ver o dashboard
         if (empty($_SESSION['is_admin'])) {
-            die("Acesso restrito ao administrador.");
+            Aviso::erro(
+                "Esta área é restrita ao administrador.",
+                BASE_URL . "/index.php",
+                "Voltar ao início"
+            );
         }
 
         $dados = [
@@ -46,6 +51,6 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
     if (method_exists($controller, $action)) {
         $controller->$action();
     } else {
-        echo "Ação inválida.";
+        Aviso::erro("Ação inválida.");
     }
 }

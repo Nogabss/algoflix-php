@@ -2,10 +2,17 @@
 require_once __DIR__ . '/../../config/session.php';
 require_once __DIR__ . '/../../helpers/Csrf.php';
 require_once __DIR__ . '/../../models/Avaliacao.php';
+require_once __DIR__ . '/../../models/Favorito.php';
 
 // $filme já vem do FilmeController::detalhes()
 $filme_id = $filme['id'];
 $media = (new Avaliacao())->media($filme_id);
+
+// Verifica se este filme já está nos favoritos do usuário logado
+$jaEhFavorito = false;
+if (!empty($_SESSION['usuario_id'])) {
+    $jaEhFavorito = (new Favorito())->existe($_SESSION['usuario_id'], $filme_id);
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -16,16 +23,14 @@ $media = (new Avaliacao())->media($filme_id);
 </head>
 <body>
 
-<header class="topo">
-    <a href="<?= BASE_URL ?>/controllers/FilmeController.php?action=index">← Voltar ao catálogo</a>
-</header>
+<?php include __DIR__ . '/../partials/header.php'; ?>
 
 <main class="detalhes">
     <div class="capa-grande">
         <?php if (!empty($filme['capa'])): ?>
             <img src="<?= htmlspecialchars($filme['capa']) ?>" alt="">
         <?php else: ?>
-            <div class="capa-placeholder grande">🎞️</div>
+            <div class="capa-placeholder grande"></div>
         <?php endif; ?>
     </div>
 
@@ -42,26 +47,37 @@ $media = (new Avaliacao())->media($filme_id);
             <?php endif; ?>
         </p>
 
-        <h2>⭐ Média: <?= $media['media'] ? round($media['media'], 1) : '0' ?></h2>
+        <p class="nota-media">
+            <span class="nota"><?= $media['media'] ? number_format($media['media'], 1, ',', '') : '—' ?></span>
+            <span class="nota-label">de 5</span>
+        </p>
 
         <p><?= nl2br(htmlspecialchars($filme['descricao'] ?? '')) ?></p>
 
         <?php if (!empty($_SESSION['usuario_id'])): ?>
-            <!-- Botão para favoritar -->
             <form method="POST" action="<?= BASE_URL ?>/controllers/FavoritoController.php">
-                <input type="hidden" name="action" value="adicionar">
+                <input type="hidden" name="action" value="<?= $jaEhFavorito ? 'remover' : 'adicionar' ?>">
                 <input type="hidden" name="filme_id" value="<?= $filme_id ?>">
                 <input type="hidden" name="csrf_token" value="<?= Csrf::token() ?>">
-                <button type="submit">➕ Minha Lista</button>
+                <?php if ($jaEhFavorito): ?>
+                    <button type="submit" class="secundario">✓ Na sua lista — Remover</button>
+                <?php else: ?>
+                    <button type="submit">+ Adicionar à Lista</button>
+                <?php endif; ?>
             </form>
         <?php endif; ?>
     </div>
 </main>
 
 <section class="interacoes">
+    <hr>
     <?php if (!empty($_SESSION['usuario_id'])): ?>
-        <hr>
         <?php include __DIR__ . '/../avaliacao/form.php'; ?>
+    <?php else: ?>
+        <p class="aviso-inline">
+            <a href="<?= BASE_URL ?>/controllers/LoginController.php?action=index">Faça login</a>
+            para avaliar e favoritar este filme.
+        </p>
     <?php endif; ?>
     <hr>
     <?php include __DIR__ . '/../comentarios/index.php'; ?>

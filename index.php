@@ -15,27 +15,7 @@ $categorias = (new Categoria())->listarTodas();
 </head>
 <body>
 
-<header class="topo">
-    <h1>🎬 Algoflix</h1>
-    <nav>
-        <a href="<?= BASE_URL ?>/index.php">Início</a>
-        <a href="<?= BASE_URL ?>/controllers/FilmeController.php?action=index">Catálogo</a>
-        <?php if (!empty($_SESSION['usuario_id'])): ?>
-            <a href="<?= BASE_URL ?>/controllers/FavoritoController.php?action=lista">Minha Lista</a>
-        <?php else: ?>
-            <a href="<?= BASE_URL ?>/login.php">Entrar</a>
-        <?php endif; ?>
-        <?php if (!empty($_SESSION['is_admin'])): ?>
-            <a href="<?= BASE_URL ?>/controllers/DashboardController.php?action=index">Dashboard</a>
-        <?php endif; ?>
-    </nav>
-
-    <form method="GET" action="<?= BASE_URL ?>/controllers/FilmeController.php" class="busca">
-        <input type="hidden" name="action" value="busca">
-        <input type="search" name="q" placeholder="Buscar..." required>
-        <button type="submit">🔎</button>
-    </form>
-</header>
+<?php include __DIR__ . '/views/partials/header.php'; ?>
 
 <main class="home">
     <!-- Para cada categoria, mostra uma fileira com os filmes dela -->
@@ -51,7 +31,7 @@ $categorias = (new Categoria())->listarTodas();
                             <?php if (!empty($f['capa'])): ?>
                                 <img src="<?= htmlspecialchars($f['capa']) ?>" alt="">
                             <?php else: ?>
-                                <div class="capa-placeholder">🎞️</div>
+                                <div class="capa-placeholder"></div>
                             <?php endif; ?>
                             <h3><?= htmlspecialchars($f['titulo']) ?></h3>
                         </a>

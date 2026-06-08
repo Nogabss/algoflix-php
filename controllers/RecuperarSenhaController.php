@@ -1,20 +1,67 @@
 <?php
-require_once '../config.php';
-require_once '../models/UserModel.php';
 
-$userModel = new UserModel($pdo);
+require_once __DIR__ . '/../config/session.php';
+require_once __DIR__ . '/../helpers/Csrf.php';
+require_once __DIR__ . '/../helpers/Aviso.php';
+require_once __DIR__ . '/../models/UserModel.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) die("CSRF Inválido.");
+class RecuperarSenhaController
+{
+    private $model;
 
-    $cpf = $_POST['cpf'];
-    $data_nasc = $_POST['data_nascimento'];
-    $nova_senha = $_POST['nova_senha'];
+    public function __construct()
+    {
+        $this->model = new UserModel();
+    }
 
-    if ($userModel->atualizarSenha($cpf, $data_nasc, $nova_senha)) {
-        echo "Senha atualizada com sucesso! <a href='../views/login.php'>Faça login</a>";
-    } else {
-        echo "Dados incorretos. CPF ou Data de Nascimento não conferem. <a href='../views/recuperar_senha.php'>Voltar</a>";
+    // Mostra o formulário de recuperação
+    public function index()
+    {
+        require __DIR__ . '/../views/recuperar_senha.php';
+    }
+
+    // Processa a troca de senha (POST)
+    public function atualizar()
+    {
+        if (!Csrf::check($_POST['csrf_token'])) {
+            Aviso::erro("Token CSRF inválido. Recarregue a página e tente novamente.");
+        }
+
+        $cpf        = $_POST['cpf'];
+        $data_nasc  = $_POST['data_nascimento'];
+        $nova_senha = $_POST['nova_senha'];
+
+        if (empty($cpf) || empty($data_nasc) || empty($nova_senha)) {
+            Aviso::erro(
+                "Todos os campos são obrigatórios.",
+                BASE_URL . "/controllers/RecuperarSenhaController.php?action=index",
+                "Voltar"
+            );
+        }
+
+        if ($this->model->atualizarSenha($cpf, $data_nasc, $nova_senha)) {
+            Aviso::sucesso(
+                "Sua senha foi atualizada com sucesso!",
+                BASE_URL . "/controllers/LoginController.php?action=index",
+                "Fazer login"
+            );
+        }
+
+        Aviso::erro(
+            "Dados incorretos. CPF ou data de nascimento não conferem.",
+            BASE_URL . "/controllers/RecuperarSenhaController.php?action=index",
+            "Tentar novamente"
+        );
     }
 }
-?>
+
+if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
+    $controller = new RecuperarSenhaController();
+    $action = $_REQUEST['action'] ?? 'index';
+
+    if (method_exists($controller, $action)) {
+        $controller->$action();
+    } else {
+        Aviso::erro("Ação inválida.");
+    }
+}
