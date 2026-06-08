@@ -40,7 +40,6 @@ class AvaliacaoController
     }
 }
 
-// Roteia ?action=... quando o controller é chamado direto
 if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
     $controller = new AvaliacaoController();
     $action = $_REQUEST['action'] ?? 'salvar';

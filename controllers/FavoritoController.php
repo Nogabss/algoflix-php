@@ -14,7 +14,6 @@ class FavoritoController
         $this->model = new Favorito();
     }
 
-    // Mostra a página "Minha Lista"
     public function lista()
     {
         if (!isset($_SESSION['usuario_id'])) {
@@ -67,7 +66,6 @@ class FavoritoController
     }
 }
 
-// Roteia ?action=... quando o controller é chamado direto
 if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
     $controller = new FavoritoController();
     $action = $_REQUEST['action'] ?? 'lista';

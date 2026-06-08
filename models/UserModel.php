@@ -11,7 +11,6 @@ class UserModel
         $this->pdo = Database::getConnection();
     }
 
-    // Cadastra um novo usuário
     public function cadastrar($nome, $cpf, $data_nasc, $senha, $role = 'usuario')
     {
         $hash = password_hash($senha, PASSWORD_DEFAULT);
@@ -30,7 +29,6 @@ class UserModel
         ]);
     }
 
-    // Busca usuário pelo CPF (para login)
     public function buscarPorCpf($cpf)
     {
         $sql = "SELECT * FROM usuarios WHERE cpf = :cpf";
@@ -40,7 +38,6 @@ class UserModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Recuperação de senha: valida CPF + data de nascimento e troca a senha
     public function atualizarSenha($cpf, $data_nasc, $nova_senha)
     {
         $sqlCheck = "SELECT id FROM usuarios WHERE cpf = :cpf AND data_nascimento = :data_nasc";

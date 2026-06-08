@@ -18,7 +18,6 @@ $categorias = (new Categoria())->listarTodas();
 <?php include __DIR__ . '/views/partials/header.php'; ?>
 
 <main class="home">
-    <!-- Para cada categoria, mostra uma fileira com os filmes dela -->
     <?php foreach ($categorias as $cat): ?>
         <?php $filmes = $filmeModel->listarPorCategoria($cat['id']); ?>
 

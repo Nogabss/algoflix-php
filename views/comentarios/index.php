@@ -9,7 +9,6 @@ $comentarios = $model->listar($filme_id);
 
 <h2>Comentários</h2>
 
-<!-- Formulário (só para usuários logados) -->
 <?php if (!empty($_SESSION['usuario_id'])): ?>
     <form method="POST" action="<?= BASE_URL ?>/controllers/ComentarioController.php">
         <input type="hidden" name="action" value="adicionar">
@@ -28,7 +27,6 @@ $comentarios = $model->listar($filme_id);
 
 <hr>
 
-<!-- Lista -->
 <?php if (empty($comentarios)): ?>
     <p class="vazio">Ainda não há comentários. Seja o primeiro!</p>
 <?php endif; ?>

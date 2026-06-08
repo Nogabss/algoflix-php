@@ -14,13 +14,11 @@ class UserController
         $this->model = new UserModel();
     }
 
-    // Mostra o formulário de cadastro
     public function index()
     {
         require __DIR__ . '/../views/cadastro.php';
     }
 
-    // Mostra o perfil do usuário logado
     public function perfil()
     {
         if (!isset($_SESSION['usuario_id'])) {
@@ -31,7 +29,6 @@ class UserController
         require __DIR__ . '/../views/perfil.php';
     }
 
-    // Processa o cadastro (POST)
     public function cadastrar()
     {
         if (!Csrf::check($_POST['csrf_token'])) {
@@ -51,7 +48,6 @@ class UserController
             );
         }
 
-        // Segurança: cadastro público sempre cria usuário comum
         $role = 'usuario';
 
         if ($this->model->cadastrar($nome, $cpf, $data_nasc, $senha, $role)) {

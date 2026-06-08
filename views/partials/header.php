@@ -1,8 +1,4 @@
 <?php
-// Header global do site.
-// Inclui marca, navegação principal, busca e ações da conta.
-// As ações de admin (criar filme, gerenciar categorias) ficam nas próprias
-// páginas como "toolbar", não aqui — não fazem parte da navegação global.
 require_once __DIR__ . '/../../config/session.php';
 ?>
 <header class="topo">

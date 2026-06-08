@@ -1,7 +1,5 @@
 <?php
 
-// Mostra uma página de aviso estilizada e encerra a execução.
-// Substitui os die() e echo dos controllers por algo bem apresentado.
 class Aviso
 {
     public static function erro($mensagem, $voltarUrl = null, $voltarTexto = 'Voltar')

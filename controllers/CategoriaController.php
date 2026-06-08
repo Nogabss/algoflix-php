@@ -14,14 +14,13 @@ class CategoriaController
         $this->model = new Categoria();
     }
 
-    // Lista todas as categorias
     public function index()
     {
         $categorias = $this->model->listarTodas();
         require __DIR__ . '/../views/categorias/index.php';
     }
 
-    // Mostra formulário e salva nova categoria
+  
     public function criar()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -39,7 +38,7 @@ class CategoriaController
         require __DIR__ . '/../views/categorias/form.php';
     }
 
-    // Mostra formulário e salva edição
+   
     public function editar()
     {
         $id = $_GET['id'] ?? $_POST['id'] ?? 0;
@@ -59,7 +58,6 @@ class CategoriaController
         require __DIR__ . '/../views/categorias/form.php';
     }
 
-    // Exclui uma categoria
     public function excluir()
     {
         if (!Csrf::check($_POST['csrf_token'])) {
@@ -73,7 +71,6 @@ class CategoriaController
     }
 }
 
-// Só executa quando o arquivo é chamado direto pelo navegador
 if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
     $controller = new CategoriaController();
     $action = $_REQUEST['action'] ?? 'index';

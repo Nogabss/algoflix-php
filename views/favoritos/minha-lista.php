@@ -2,7 +2,6 @@
 require_once __DIR__ . '/../../config/session.php';
 require_once __DIR__ . '/../../helpers/Csrf.php';
 
-// Esta view é incluída por FavoritoController::lista(), que já define $filmes
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -32,7 +31,6 @@ require_once __DIR__ . '/../../helpers/Csrf.php';
                         <div class="capa-placeholder"></div>
                     <?php endif; ?>
 
-                    <!-- Botão remover discreto, sobreposto à capa -->
                     <form method="POST"
                           action="<?= BASE_URL ?>/controllers/FavoritoController.php"
                           class="botao-remover"

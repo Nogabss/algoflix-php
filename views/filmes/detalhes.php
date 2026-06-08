@@ -4,11 +4,9 @@ require_once __DIR__ . '/../../helpers/Csrf.php';
 require_once __DIR__ . '/../../models/Avaliacao.php';
 require_once __DIR__ . '/../../models/Favorito.php';
 
-// $filme já vem do FilmeController::detalhes()
 $filme_id = $filme['id'];
 $media = (new Avaliacao())->media($filme_id);
 
-// Verifica se este filme já está nos favoritos do usuário logado
 $jaEhFavorito = false;
 if (!empty($_SESSION['usuario_id'])) {
     $jaEhFavorito = (new Favorito())->existe($_SESSION['usuario_id'], $filme_id);

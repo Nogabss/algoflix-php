@@ -38,7 +38,6 @@ class Favorito
         ]);
     }
 
-    // Verifica se um filme já está nos favoritos do usuário
     public function existe($usuario_id, $filme_id)
     {
         $sql = "SELECT 1 FROM favoritos

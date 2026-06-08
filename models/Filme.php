@@ -11,7 +11,6 @@ class Filme
         $this->pdo = Database::getConnection();
     }
 
-    // Lista todos os filmes, junto com o nome da categoria
     public function listarTodos()
     {
         $sql = "SELECT f.*, c.nome AS categoria_nome
@@ -23,7 +22,6 @@ class Filme
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Busca um filme pelo id
     public function buscarPorId($id)
     {
         $sql = "SELECT f.*, c.nome AS categoria_nome
@@ -36,7 +34,6 @@ class Filme
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Lista filmes de uma categoria
     public function listarPorCategoria($categoria_id)
     {
         $sql = "SELECT f.*, c.nome AS categoria_nome
@@ -49,7 +46,6 @@ class Filme
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Procura pelo título
     public function buscar($termo)
     {
         $sql = "SELECT f.*, c.nome AS categoria_nome
@@ -62,7 +58,6 @@ class Filme
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Cria um novo filme
     public function criar($titulo, $descricao, $capa, $ano, $tipo, $categoria_id)
     {
         $sql = "INSERT INTO filmes (titulo, descricao, capa, ano, tipo, categoria_id)
@@ -79,7 +74,6 @@ class Filme
         ]);
     }
 
-    // Atualiza um filme existente
     public function atualizar($id, $titulo, $descricao, $capa, $ano, $tipo, $categoria_id)
     {
         $sql = "UPDATE filmes
@@ -103,7 +97,6 @@ class Filme
         ]);
     }
 
-    // Exclui um filme
     public function excluir($id)
     {
         $sql = "DELETE FROM filmes WHERE id = :id";

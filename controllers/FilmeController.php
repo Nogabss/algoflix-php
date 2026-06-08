@@ -14,14 +14,12 @@ class FilmeController
         $this->model = new Filme();
     }
 
-    // Mostra a lista de todos os filmes
     public function index()
     {
         $filmes = $this->model->listarTodos();
         require __DIR__ . '/../views/filmes/index.php';
     }
 
-    // Mostra a página de um filme
     public function detalhes()
     {
         $id = $_GET['id'] ?? 0;
@@ -34,7 +32,6 @@ class FilmeController
         require __DIR__ . '/../views/filmes/detalhes.php';
     }
 
-    // Mostra os filmes de uma categoria
     public function porCategoria()
     {
         $categoria_id = $_GET['categoria_id'] ?? 0;
@@ -42,7 +39,6 @@ class FilmeController
         require __DIR__ . '/../views/filmes/index.php';
     }
 
-    // Busca por título
     public function busca()
     {
         $termo = $_GET['q'] ?? '';
@@ -50,7 +46,6 @@ class FilmeController
         require __DIR__ . '/../views/filmes/busca.php';
     }
 
-    // Mostra formulário e salva novo filme
     public function criar()
     {
         $this->exigirAdmin();
@@ -60,7 +55,6 @@ class FilmeController
                 Aviso::erro("Token CSRF inválido. Recarregue a página e tente novamente.");
             }
 
-            // Validação simples: título é obrigatório
             if (empty(trim($_POST['titulo']))) {
                 Aviso::erro("O título do filme é obrigatório.");
             }
@@ -85,7 +79,6 @@ class FilmeController
         require __DIR__ . '/../views/filmes/form.php';
     }
 
-    // Mostra formulário e salva edição
     public function editar()
     {
         $this->exigirAdmin();
@@ -122,7 +115,6 @@ class FilmeController
         require __DIR__ . '/../views/filmes/form.php';
     }
 
-    // Exclui um filme
     public function excluir()
     {
         $this->exigirAdmin();
@@ -137,7 +129,6 @@ class FilmeController
         exit;
     }
 
-    // Só admin pode criar/editar/excluir filmes
     private function exigirAdmin()
     {
         if (empty($_SESSION['is_admin'])) {
@@ -150,8 +141,6 @@ class FilmeController
     }
 }
 
-// Só executa a dispatch quando o arquivo é chamado direto pelo navegador
-// (não quando outros arquivos fazem require deste controller)
 if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
     $controller = new FilmeController();
     $action = $_REQUEST['action'] ?? 'index';

@@ -3,7 +3,6 @@ require_once __DIR__ . '/../../config/session.php';
 require_once __DIR__ . '/../../helpers/Csrf.php';
 require_once __DIR__ . '/../../models/Categoria.php';
 
-// Carrega as categorias para mostrar os filtros
 $categorias = (new Categoria())->listarTodas();
 ?>
 <!DOCTYPE html>
@@ -17,7 +16,6 @@ $categorias = (new Categoria())->listarTodas();
 
 <?php include __DIR__ . '/../partials/header.php'; ?>
 
-<!-- Cabeçalho da página + toolbar de admin -->
 <div class="pagina-cabecalho">
     <h1>Catálogo</h1>
     <?php if (!empty($_SESSION['is_admin'])): ?>
@@ -29,7 +27,6 @@ $categorias = (new Categoria())->listarTodas();
     <?php endif; ?>
 </div>
 
-<!-- Filtros por categoria -->
 <section class="filtros">
     <a href="<?= BASE_URL ?>/controllers/FilmeController.php?action=index" class="chip">Todos</a>
     <?php foreach ($categorias as $cat): ?>
@@ -39,7 +36,6 @@ $categorias = (new Categoria())->listarTodas();
     <?php endforeach; ?>
 </section>
 
-<!-- Lista de filmes -->
 <main class="grade">
     <?php if (empty($filmes)): ?>
         <p>Nenhum filme encontrado.</p>

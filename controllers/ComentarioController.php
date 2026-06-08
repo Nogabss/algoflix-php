@@ -40,7 +40,6 @@ class ComentarioController
     }
 }
 
-// Roteia ?action=... quando o controller é chamado direto
 if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
     $controller = new ComentarioController();
     $action = $_REQUEST['action'] ?? 'adicionar';

@@ -2,7 +2,6 @@
 require_once __DIR__ . '/../../config/session.php';
 require_once __DIR__ . '/../../helpers/Csrf.php';
 
-// Se $filme não for null, estamos editando. Se for null, estamos criando.
 $editando = !empty($filme);
 ?>
 <!DOCTYPE html>

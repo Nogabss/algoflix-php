@@ -14,13 +14,11 @@ class RecuperarSenhaController
         $this->model = new UserModel();
     }
 
-    // Mostra o formulário de recuperação
     public function index()
     {
         require __DIR__ . '/../views/recuperar_senha.php';
     }
 
-    // Processa a troca de senha (POST)
     public function atualizar()
     {
         if (!Csrf::check($_POST['csrf_token'])) {

@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/session.php';
 
-// Controle de sessão: se não estiver logado, vai para o login
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: " . BASE_URL . "/controllers/LoginController.php?action=index");
     exit;

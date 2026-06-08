@@ -14,13 +14,11 @@ class LoginController
         $this->model = new UserModel();
     }
 
-    // Mostra o formulário de login
     public function index()
     {
         require __DIR__ . '/../views/login.php';
     }
 
-    // Processa o login (POST)
     public function entrar()
     {
         if (!Csrf::check($_POST['csrf_token'])) {
@@ -37,7 +35,6 @@ class LoginController
             $_SESSION['usuario_role'] = $usuario['role'];
             $_SESSION['is_admin']     = ($usuario['role'] === 'admin');
 
-            // Cookie "lembrar-me" (30 dias) — guarda o CPF para preencher o form
             if (isset($_POST['lembrar'])) {
                 setcookie('lembrar_usuario', $usuario['cpf'], time() + (86400 * 30), '/');
             }
@@ -53,7 +50,6 @@ class LoginController
         );
     }
 
-    // Logout
     public function sair()
     {
         $_SESSION = [];
@@ -65,7 +61,6 @@ class LoginController
     }
 }
 
-// Roteia ?action=... quando o controller é chamado direto
 if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
     $controller = new LoginController();
     $action = $_REQUEST['action'] ?? 'index';

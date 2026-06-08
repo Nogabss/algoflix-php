@@ -15,7 +15,6 @@ class DashboardController
 
     public function index()
     {
-        // Só admin pode ver o dashboard
         if (empty($_SESSION['is_admin'])) {
             Aviso::erro(
                 "Esta área é restrita ao administrador.",
@@ -43,7 +42,6 @@ class DashboardController
     }
 }
 
-// Roteia ?action=... quando o controller é chamado direto
 if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
     $controller = new DashboardController();
     $action = $_REQUEST['action'] ?? 'index';
